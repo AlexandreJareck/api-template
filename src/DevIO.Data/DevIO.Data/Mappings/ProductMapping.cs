@@ -20,7 +20,10 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.Image)
             .IsRequired()
-            .HasMaxLength(100);        
+            .HasMaxLength(100);
+
+        builder.Property(p => p.Value)
+            .HasPrecision(18, 2);
     }
 
 }
