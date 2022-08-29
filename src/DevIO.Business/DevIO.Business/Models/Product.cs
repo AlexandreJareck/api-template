@@ -10,4 +10,6 @@ public class Product : Entity
     public decimal Value { get; set; }
     public DateTime RegisterDate { get; set; }
     public bool Active { get; set; }
+
+    public Provider Provider { get; set; }
 }

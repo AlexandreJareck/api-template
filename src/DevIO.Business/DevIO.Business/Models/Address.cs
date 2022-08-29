@@ -1,6 +1,6 @@
 ﻿namespace DevIO.Business.Models;
 
-public class Address
+public class Address : Entity
 {
     public Guid ProviderId { get; set; }
     public string Street { get; set; }
