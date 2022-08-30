@@ -6,7 +6,7 @@ namespace DevIO.Business.Interfaces;
 public interface IRepository<TEntity> : IDisposable where TEntity : Entity
 {
     Task Add(TEntity entity);
-    Task GetById(Guid id);
+    Task<TEntity> GetById(Guid id);
     Task<List<TEntity>> GetAll();
     Task Update(TEntity obj);
     Task Remove(Guid id);
