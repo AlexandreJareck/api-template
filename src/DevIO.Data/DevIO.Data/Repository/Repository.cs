@@ -11,6 +11,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     protected readonly MyDbContext Db;
     protected readonly DbSet<TEntity> DbSet;
 
+    public Repository(MyDbContext db)
+    {
+        Db = db;
+        DbSet = db.Set<TEntity>();
+    }
+
     public virtual async Task<TEntity> GetById(Guid id)
     {
         return await DbSet.FindAsync(id) ?? new TEntity();
