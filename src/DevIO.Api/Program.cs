@@ -1,3 +1,4 @@
+using DevIO.Api.Configuration;
 using DevIO.Business.Interfaces;
 using DevIO.Data.Context;
 using DevIO.Data.Repository;
@@ -16,14 +17,14 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<MyDbContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MyDbContext>(x => x.UseSqlServer(builder.Configuration
+    .GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.SetDependencies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
