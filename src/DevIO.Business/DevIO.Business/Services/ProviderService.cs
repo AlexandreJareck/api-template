@@ -5,9 +5,12 @@ namespace DevIO.Business.Services;
 
 public class ProviderService : BaseService, IProviderService
 {
-    public Task Add(Provider provider)
+    public async Task Add(Provider provider)
     {
-        throw new NotImplementedException();
+        if (!ExecuteValidation(new ProviderValidation(), provider))
+            return;
+
+        return;
     }
 
     public Task Remove(Guid id)
