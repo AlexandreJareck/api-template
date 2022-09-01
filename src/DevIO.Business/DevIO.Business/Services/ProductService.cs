@@ -5,18 +5,18 @@ namespace DevIO.Business.Services;
 
 public class ProductService : BaseService, IProductService
 {
-    public Task Add(Product product)
+    public async Task Add(Product product)
+    {
+        if (!ExecuteValidation(new ProductValidation(), product)) return;
+    }
+
+    public async Task Remove(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task Remove(Guid id)
+    public async Task Update(Product product)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task Update(Product product)
-    {
-        throw new NotImplementedException();
+        if (!ExecuteValidation(new ProductValidation(), product)) return;
     }
 }

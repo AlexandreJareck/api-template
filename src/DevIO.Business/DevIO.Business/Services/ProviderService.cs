@@ -7,24 +7,24 @@ public class ProviderService : BaseService, IProviderService
 {
     public async Task Add(Provider provider)
     {
-        if (!ExecuteValidation(new ProviderValidation(), provider))
+        if (!ExecuteValidation(new ProviderValidation(), provider) 
+            && !ExecuteValidation(new AddressValidation(), provider.Addreess))
             return;
 
-        return;
     }
 
-    public Task Remove(Guid id)
+    public async Task Remove(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task Update(Provider provider)
+    public async Task Update(Provider provider)
     {
-        throw new NotImplementedException();
+        if (!ExecuteValidation(new ProviderValidation(), provider)) return;
     }
 
-    public Task UpdateAddress(Address address)
+    public async Task UpdateAddress(Address address)
     {
-        throw new NotImplementedException();
+        if (!ExecuteValidation(new AddressValidation(), address)) return;
     }
 }
