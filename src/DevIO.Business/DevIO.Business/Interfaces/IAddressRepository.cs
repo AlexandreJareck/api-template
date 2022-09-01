@@ -2,7 +2,7 @@
 
 namespace DevIO.Business.Interfaces;
 
-public interface IAddressRepository
-{
-    Task<Address> GetAddressByProvider(Guid providerId);
+public interface IAddressRepository : IRepository<Address>
+{ 
+    Task<Address> GetAddressByProvider(Guid addressId);
 }
