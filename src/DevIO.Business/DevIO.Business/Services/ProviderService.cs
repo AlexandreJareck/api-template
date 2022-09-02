@@ -59,4 +59,10 @@ public class ProviderService : BaseService, IProviderService
 
         await _addressRepository.Update(address);
     }
+
+    public void Dispose()
+    {
+        _providerRepository?.Dispose();
+        _addressRepository?.Dispose();
+    }
 }
