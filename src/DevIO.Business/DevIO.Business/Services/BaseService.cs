@@ -1,4 +1,6 @@
-﻿using DevIO.Business.Models;
+﻿using DevIO.Business.Interfaces;
+using DevIO.Business.Models;
+using DevIO.Business.Notifications;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -6,17 +8,21 @@ namespace DevIO.Business.Services;
 
 public class BaseService
 {
-    protected void Notification(ValidationResult validationResult)
+    private readonly INotifier _notifier;
+
+    public BaseService(INotifier notifier)
     {
-        foreach (var error in validationResult.Errors)
-        {
-            Notification(error.ErrorMessage);
-        }
+        _notifier = notifier;
     }
 
-    protected void Notification(string message)
+    protected void Notify(ValidationResult validationResult)
     {
+        validationResult.Errors.ForEach(e => Notify(e.ErrorMessage));
+    }
 
+    protected void Notify(string message)
+    {
+        _notifier.Handle(new Notification(message));
     }
 
     protected bool ExecuteValidation<TV, TE>(TV validation, TE entity) where TV : AbstractValidator<TE> where TE : Entity
@@ -25,7 +31,7 @@ public class BaseService
 
         if (validator.IsValid) return true;
 
-        Notification(validator);
+        Notify(validator);
 
         return false;
     }

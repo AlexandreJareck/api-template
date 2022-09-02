@@ -8,7 +8,8 @@ public class ProviderService : BaseService, IProviderService
     private readonly IProviderRepository _providerRepository;
     private readonly IAddressRepository _addressRepository;
 
-    public ProviderService(IProviderRepository providerRepository, IAddressRepository addressRepository)
+    public ProviderService(IProviderRepository providerRepository, IAddressRepository addressRepository,
+        INotifier notifier) : base(notifier)
     {
         _providerRepository = providerRepository;
         _addressRepository = addressRepository;
@@ -22,7 +23,7 @@ public class ProviderService : BaseService, IProviderService
 
         if (_providerRepository.Get(p => p.Document == p.Document).Result.Any())
         {
-            Notification("Já existe um fornecedor com este documento informado");
+            Notify("Já existe um fornecedor com este documento informado");
             return;
         }
 
@@ -33,7 +34,7 @@ public class ProviderService : BaseService, IProviderService
     {
         if (_providerRepository.GetProviderProductAddress(id).Result.Products.Any())
         {
-            Notification("O fornecedor possui produtos cadastrados!");
+            Notify("O fornecedor possui produtos cadastrados!");
             return;
         }
 
@@ -46,7 +47,7 @@ public class ProviderService : BaseService, IProviderService
 
         if (_providerRepository.Get(p => p.Document == provider.Document && p.Id != provider.Id).Result.Any())
         {
-            Notification("Já existe um fornecedor com este documento informado");
+            Notify("Já existe um fornecedor com este documento informado");
             return;
         }
 
