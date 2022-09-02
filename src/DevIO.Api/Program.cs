@@ -1,5 +1,6 @@
 using DevIO.Api.Configuration;
 using DevIO.Business.Interfaces;
+using DevIO.Business.Services;
 using DevIO.Data.Context;
 using DevIO.Data.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,10 @@ builder.Services.AddScoped<MyDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+
+builder.Services.AddScoped<INotifier, INotifier>();
+builder.Services.AddScoped<IProviderService, ProviderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddDbContext<MyDbContext>(x => x.UseSqlServer(builder.Configuration
     .GetConnectionString("DefaultConnection")));
