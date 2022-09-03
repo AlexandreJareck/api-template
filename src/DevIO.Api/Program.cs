@@ -1,5 +1,6 @@
 using DevIO.Api.Configuration;
 using DevIO.Business.Interfaces;
+using DevIO.Business.Notifications;
 using DevIO.Business.Services;
 using DevIO.Data.Context;
 using DevIO.Data.Repository;
@@ -18,7 +19,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
-builder.Services.AddScoped<INotifier, INotifier>();
+builder.Services.AddScoped<INotifier, Notifier>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
