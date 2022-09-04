@@ -18,5 +18,5 @@ public class ProviderDTO
     public AddressDTO Address { get; set; }
     public bool Active { get; set; }
 
-    public IEnumerable<ProductDTO> Products { get; set; }
+    public IEnumerable<ProductDTO>? Products { get; set; }
 }
