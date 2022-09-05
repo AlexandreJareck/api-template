@@ -27,7 +27,7 @@ public class ProviderService : BaseService, IProviderService
             return;
         }
 
-        await _providerRepository.Add(provider);
+        await _providerRepository.Add(provider!);
     }
 
     public async Task Remove(Guid id)
