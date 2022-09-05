@@ -18,7 +18,7 @@ public class ProviderService : BaseService, IProviderService
     public async Task Add(Provider provider)
     {
         if (!ExecuteValidation(new ProviderValidation(), provider)
-            && !ExecuteValidation(new AddressValidation(), provider.Address))
+            || !ExecuteValidation(new AddressValidation(), provider?.Address!))
             return;
 
         if (_providerRepository.Get(p => p.Document == p.Document).Result.Any())
@@ -32,7 +32,7 @@ public class ProviderService : BaseService, IProviderService
 
     public async Task Remove(Guid id)
     {
-        if (_providerRepository.GetProviderProductAddress(id).Result.Products.Any())
+        if (_providerRepository.GetProviderProductAddress(id).Result.Products!.Any())
         {
             Notify("O fornecedor possui produtos cadastrados!");
             return;
