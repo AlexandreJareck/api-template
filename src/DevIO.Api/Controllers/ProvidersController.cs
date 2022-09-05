@@ -46,7 +46,7 @@ public class ProvidersController : MainController
 
         await _providerService.Add(provider);
 
-        return Ok();
+        return Ok(provider);
     }
 
     [HttpPut("{id:guid}")]
@@ -70,6 +70,6 @@ public class ProvidersController : MainController
 
         await _providerService.Remove(id);
 
-        return Ok();
+        return Ok(provider);
     }
 }
