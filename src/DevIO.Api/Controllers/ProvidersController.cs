@@ -13,7 +13,10 @@ public class ProvidersController : MainController
     private readonly IProviderService _providerService;
     private readonly IMapper _mapper;
 
-    public ProvidersController(IProviderRepository providerRepository, IMapper mapper, IProviderService providerService)
+    public ProvidersController(IProviderRepository providerRepository,
+                               IMapper mapper,
+                               IProviderService providerService,
+                               INotifier notifier) : base(notifier)
     {
         _providerRepository = providerRepository;
         _mapper = mapper;
@@ -30,46 +33,51 @@ public class ProvidersController : MainController
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ProviderDTO>> GetById(Guid id)
     {
-        var provider = _mapper.Map<ProviderDTO>(await _providerRepository.GetProviderProductAddress(id));
+        var providerDTO = _mapper.Map<ProviderDTO>(await _providerRepository.GetProviderProductAddress(id));
 
-        if (provider == null) return NotFound();
+        if (providerDTO == null) return NotFound();
 
-        return Ok(provider);
+        return Ok(providerDTO);
     }
 
     [HttpPost]
     public async Task<ActionResult<ProviderDTO>> Add(ProviderDTO providerDTO)
     {
-        if (!ModelState.IsValid) return BadRequest();
+        if (!ModelState.IsValid) 
+            return CustomResponse(ModelState);
 
-        var provider = _mapper.Map<Provider>(providerDTO);
+        await _providerService.Add(_mapper.Map<Provider>(providerDTO));
 
-        await _providerService.Add(provider);
-
-        return Ok(provider);
+        return CustomResponse(providerDTO);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ProviderDTO>> Update(Guid id, ProviderDTO providerDTO)
     {
-        if (id != providerDTO.Id) return BadRequest();
+        if (id != providerDTO.Id)
+        {
+            NotifyError("Id inválido!");
+            return CustomResponse(providerDTO);
+        }
 
-        if (!ModelState.IsValid) return BadRequest();
+        if (!ModelState.IsValid) 
+            return CustomResponse(ModelState);
 
         await _providerService.Update(_mapper.Map<Provider>(providerDTO));
 
-        return Ok(providerDTO);
+        return CustomResponse(providerDTO);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<ProviderDTO>> Delete(Guid id)
     {
-        var provider = _mapper.Map<ProviderDTO>(await _providerRepository.GetProviderAddress(id));
+        var providerDTO = _mapper.Map<ProviderDTO>(await _providerRepository.GetProviderAddress(id));
 
-        if (provider == null) return NotFound();
+        if (providerDTO == null) 
+            return NotFound();
 
         await _providerService.Remove(id);
 
-        return Ok(provider);
+        return CustomResponse();
     }
 }
