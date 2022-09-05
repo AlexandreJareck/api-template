@@ -18,7 +18,7 @@ public class ProviderService : BaseService, IProviderService
     public async Task Add(Provider provider)
     {
         if (!ExecuteValidation(new ProviderValidation(), provider)
-            && !ExecuteValidation(new AddressValidation(), provider.Addreess))
+            && !ExecuteValidation(new AddressValidation(), provider.Address))
             return;
 
         if (_providerRepository.Get(p => p.Document == p.Document).Result.Any())

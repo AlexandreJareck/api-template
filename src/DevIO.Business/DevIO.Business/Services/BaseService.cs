@@ -29,7 +29,8 @@ public class BaseService
     {
         var validator = validation.Validate(entity);
 
-        if (validator.IsValid) return true;
+        if (validator.IsValid) 
+            return true;
 
         Notify(validator);
 

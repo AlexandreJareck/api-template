@@ -18,7 +18,7 @@ public class ProviderMapping : IEntityTypeConfiguration<Provider>
             .IsRequired()
             .HasMaxLength(14);
 
-        builder.HasOne(p => p.Addreess)
+        builder.HasOne(p => p.Address)
             .WithOne(a => a.Provider);
 
         builder.HasMany(p => p.Products)

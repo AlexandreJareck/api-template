@@ -10,9 +10,9 @@ public class Provider : Entity
     public bool Active { get; set; }
 
     public TypeProvider TypeProvider { get; set; }
-    public Address Addreess { get; set; }
+    public Address? Address { get; set; }
 
-    public IEnumerable<Product> Products { get; set; }
+    public IEnumerable<Product>? Products { get; set; }
 }
 
 public class ProviderValidation : AbstractValidator<Provider>

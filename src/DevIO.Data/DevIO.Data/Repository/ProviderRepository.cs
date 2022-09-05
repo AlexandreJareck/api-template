@@ -16,7 +16,7 @@ public class ProviderRepository : Repository<Provider>, IProviderRepository
     {
         return await Db.Providers
             .AsNoTracking()
-            .Include(c => c.Addreess)
+            .Include(c => c.Address)
             .FirstOrDefaultAsync(c => c.Id == id) 
             ?? new Provider();
     }
@@ -26,7 +26,7 @@ public class ProviderRepository : Repository<Provider>, IProviderRepository
         return await Db.Providers
             .AsNoTracking()
             .Include(c => c.Products)
-            .Include(c => c.Addreess)
+            .Include(c => c.Address)
             .FirstOrDefaultAsync(c => c.Id == id)
             ?? new Provider();
     }

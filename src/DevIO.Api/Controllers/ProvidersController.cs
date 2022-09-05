@@ -56,11 +56,9 @@ public class ProvidersController : MainController
 
         if (!ModelState.IsValid) return BadRequest();
 
-        var provider = _mapper.Map<Provider>(providerDTO);
+        await _providerService.Update(_mapper.Map<Provider>(providerDTO));
 
-        await _providerService.Update(provider);
-
-        return Ok();
+        return Ok(providerDTO);
     }
 
     [HttpDelete("{id:guid}")]
