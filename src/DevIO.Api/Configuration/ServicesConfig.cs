@@ -1,4 +1,5 @@
 ﻿using DevIO.Data.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevIO.Api.Configuration;
@@ -16,6 +17,12 @@ public class ServicesConfig
             .GetConnectionString("DefaultConnection")));
 
         builder.Services.AddAutoMapper(typeof(Program));
-        builder.Services.SetDependencies();
+
+        builder.Services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
+
+        builder.Services.ResolveDependencies();
     }
 }

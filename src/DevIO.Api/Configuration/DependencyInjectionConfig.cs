@@ -8,7 +8,7 @@ namespace DevIO.Api.Configuration;
 
 public static class DependencyInjectionConfig
 {
-    public static IServiceCollection SetDependencies(this IServiceCollection services)
+    public static IServiceCollection ResolveDependencies(this IServiceCollection services)
     {
         services.AddScoped<MyDbContext>();
         services.AddScoped<IProductRepository, ProductRepository>();
