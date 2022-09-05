@@ -40,7 +40,7 @@ public class ProvidersController : MainController
     [HttpPost]
     public async Task<ActionResult<ProviderDTO>> Add(ProviderDTO providerDTO)
     {
-        if (ModelState.IsValid) return BadRequest();
+        if (!ModelState.IsValid) return BadRequest();
 
         var provider = _mapper.Map<Provider>(providerDTO);
 
@@ -54,7 +54,7 @@ public class ProvidersController : MainController
     {
         if (id != providerDTO.Id) return BadRequest();
 
-        if (ModelState.IsValid) return BadRequest();
+        if (!ModelState.IsValid) return BadRequest();
 
         var provider = _mapper.Map<Provider>(providerDTO);
 
