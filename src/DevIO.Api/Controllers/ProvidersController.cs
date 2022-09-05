@@ -23,6 +23,7 @@ public class ProvidersController : MainController
         _providerRepository = providerRepository;
         _mapper = mapper;
         _providerService = providerService;
+        _addressRepository = addressRepository;
     }
 
     [HttpGet]
