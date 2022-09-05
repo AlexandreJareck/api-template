@@ -38,6 +38,11 @@ public class ProviderService : BaseService, IProviderService
             return;
         }
 
+        var address = await _addressRepository.GetAddressByProvider(id);
+
+        if (address != null)
+            await _addressRepository.Remove(address.Id);
+
         await _providerRepository.Remove(id);
     }
 
