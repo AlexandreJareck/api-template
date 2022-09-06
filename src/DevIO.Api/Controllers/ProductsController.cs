@@ -29,12 +29,12 @@ public class ProductsController : MainController
     {
         if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-        var imgName = $"{Guid.NewGuid()}_{productDTO.Imagem}";
+        var imgName = $"{Guid.NewGuid()}_{productDTO.Image}";
 
-        if(!UploadFile(productDTO.ImagemUpload, imgName))
+        if(!UploadFile(productDTO.ImageUpload, imgName))
             return CustomResponse();
 
-        productDTO.Imagem = imgName;
+        productDTO.Image = imgName;
         await _productService.Add(_mapper.Map<Product>(productDTO));
 
         return CustomResponse(productDTO);
