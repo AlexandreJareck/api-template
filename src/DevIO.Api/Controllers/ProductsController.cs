@@ -56,6 +56,44 @@ public class ProductsController : MainController
         return CustomResponse(productDTO);
     }
 
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, ProductDTO productDTO)
+    {
+        if (id != productDTO.Id)
+        {
+            NotifyError("Id inválido!");
+            return CustomResponse();
+        }
+
+        var productUpdate = _mapper.Map<ProductDTO>(await _productRepository.GetProductProvider(id));
+
+        if (string.IsNullOrEmpty(productDTO.Image))
+            productDTO.Image = productUpdate.Image;
+
+        if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+        if (productDTO.ImageUpload != null)
+        {
+            var imagemNome = $"{Guid.NewGuid()}_{productDTO.Image}";
+
+            if (!UploadFile(productDTO.ImageUpload, imagemNome))
+                return CustomResponse(ModelState);
+
+            productUpdate.Image = imagemNome;
+        }
+
+        productUpdate.ProviderId = productDTO.ProviderId;
+        productUpdate.Name = productDTO.Name;
+        productUpdate.Description = productDTO.Description;
+        productUpdate.Value = productDTO.Value;
+        productUpdate.Active = productDTO.Active;
+
+        await _productService.Update(_mapper.Map<Product>(productUpdate));
+
+        return CustomResponse(productDTO);
+    }
+
+
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<ProductDTO>> Delete(Guid id)
     {

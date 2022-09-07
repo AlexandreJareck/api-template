@@ -1,24 +1,44 @@
-﻿namespace DevIO.Api.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class AppConfig
+namespace DevIO.Api.Configuration;
+
+public static class AppConfig
 {
-    public static void UseApp(WebApplicationBuilder builder)
+    public static IServiceCollection AddApiConfig(this IServiceCollection services)
     {
-        var app = builder.Build();
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
 
-        if (app.Environment.IsDevelopment())
+        services.Configure<ApiBehaviorOptions>(options =>
         {
-            SwaggerConfig.UseSwagger(app);
-        }
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
-        app.UseCors("Devlopment");
+        services.AddCors(options =>
+        {
+            options.AddPolicy("Devlopment", builder =>
+              builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+        });
+
+        services.ResolveDependencies();
+
+        return services;
+    }
+
+    public static IApplicationBuilder UseApiConfig(this IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseCors("Development");
+        }       
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
-        app.MapControllers();
-
-        app.Run();
+        return app;
     }
 }

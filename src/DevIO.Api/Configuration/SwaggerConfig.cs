@@ -1,10 +1,12 @@
 ﻿namespace DevIO.Api.Configuration;
 
-public class SwaggerConfig
+public static class SwaggerConfig
 {
-    public static void UseSwagger(WebApplication app)
+    public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app)
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        return app;
     }
 }
