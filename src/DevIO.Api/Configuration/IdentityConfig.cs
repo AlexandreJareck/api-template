@@ -7,7 +7,6 @@ public static class IdentityConfig
 {
     public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
@@ -15,5 +14,4 @@ public static class IdentityConfig
 
         return services;
     }
-
 }
