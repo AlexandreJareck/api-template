@@ -37,7 +37,9 @@ public static class AppConfig
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        app.UseAuthentication();
+        
+        //app.UseAuthorization();
 
         return app;
     }
