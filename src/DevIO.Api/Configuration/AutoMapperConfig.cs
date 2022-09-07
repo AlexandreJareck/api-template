@@ -10,6 +10,9 @@ public class AutoMapperConfig : Profile
     {
         CreateMap<Provider, ProviderDTO>().ReverseMap();
         CreateMap<Address, AddressDTO>().ReverseMap();
-        CreateMap<Product, ProductDTO>().ReverseMap();
+        CreateMap<ProductDTO, Product>();
+
+        CreateMap<Product, ProductDTO>()
+            .ForMember(dest => dest.NameProvider, opt => opt.MapFrom(src => src.Provider.Name));
     }
 }
