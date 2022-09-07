@@ -23,6 +23,15 @@ public class ServicesConfig
             options.SuppressModelStateInvalidFilter = true;
         });
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("Devlopment", builder =>
+              builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());                
+        });
+
         builder.Services.ResolveDependencies();
     }
 }

@@ -11,6 +11,8 @@ public class AppConfig
             SwaggerConfig.UseSwagger(app);
         }
 
+        app.UseCors("Devlopment");
+
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
