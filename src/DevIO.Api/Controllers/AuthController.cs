@@ -19,11 +19,7 @@ namespace DevIO.Api.Controllers
             _userManager = userManager;
         }
 
-        public AuthController(INotifier notifier) : base(notifier)
-        {
-        }
-
-        [HttpPost("/nova-conta")]
+        [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDTO registerUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -51,7 +47,7 @@ namespace DevIO.Api.Controllers
             return CustomResponse(registerUser);
         }
 
-        [HttpPost("/entrar")]
+        [HttpPost("entrar")]
         public async Task<ActionResult> Login(LoginUserDTO loginUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
