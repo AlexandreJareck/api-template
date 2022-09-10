@@ -21,7 +21,7 @@ namespace DevIO.Api.Extensions
         }
     }
 
-    public class RequirementClaimFilter
+    public class RequirementClaimFilter : IAuthorizationFilter
     {
         private readonly Claim _claim;
 
