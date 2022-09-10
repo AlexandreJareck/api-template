@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DevIO.Api.DTOs;
+using DevIO.Api.Extensions;
 using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,7 @@ public class ProvidersController : MainController
         return Ok(providerDTO);
     }
 
+    [ClaimsAuthorize("Provider", "Add")]
     [HttpPost]
     public async Task<ActionResult<ProviderDTO>> Add(ProviderDTO providerDTO)
     {
@@ -54,6 +56,7 @@ public class ProvidersController : MainController
         return CustomResponse(providerDTO);
     }
 
+    [ClaimsAuthorize("Provider", "Update")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ProviderDTO>> Update(Guid id, ProviderDTO providerDTO)
     {
@@ -71,6 +74,7 @@ public class ProvidersController : MainController
         return CustomResponse(providerDTO);
     }
 
+    [ClaimsAuthorize("Provider", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<ProviderDTO>> Delete(Guid id)
     {
@@ -92,6 +96,7 @@ public class ProvidersController : MainController
         return addressDTO;
     }
 
+    [ClaimsAuthorize("Provider", "Update")]
     [HttpPut("atualizar-endereco/{id:guid}")]
     public async Task<IActionResult> UpdateAddress(Guid id, AddressDTO addressDTO)
     {
