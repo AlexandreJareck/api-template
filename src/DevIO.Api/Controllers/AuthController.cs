@@ -28,6 +28,28 @@ namespace DevIO.Api.Controllers
             _appSettings = appSettings.Value;
         }
 
+        [HttpPost("entrar")]
+        public async Task<ActionResult> Login(LoginUserDTO loginUser)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
+
+            if (result.Succeeded)
+            {
+                return CustomResponse(await GenerateJwt(loginUser.Email));
+            }
+
+            if (result.IsLockedOut)
+            {
+                NotifyError("Usuário temporariamente bloqueado por tentativas inválidas");
+                return CustomResponse(loginUser);
+            }
+
+            NotifyError("Usuário ou Senha incorretos");
+            return CustomResponse(loginUser);
+        }
+
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDTO registerUser)
         {
@@ -56,78 +78,81 @@ namespace DevIO.Api.Controllers
             return CustomResponse(registerUser);
         }
 
-        [HttpPost("entrar")]
-        public async Task<ActionResult> Login(LoginUserDTO loginUser)
-        {
-            if (!ModelState.IsValid) return CustomResponse(ModelState);
-
-            var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
-
-            if (result.Succeeded)
-            {
-                return CustomResponse(await GenerateJwt(loginUser.Email));
-            }
-
-            if (result.IsLockedOut)
-            {
-                NotifyError("Usuário temporariamente bloqueado por tentativas inválidas");
-                return CustomResponse(loginUser);
-            }
-
-            NotifyError("Usuário ou Senha incorretos");
-            return CustomResponse(loginUser);
-        }
 
         private async Task<LoginResponseDTO> GenerateJwt(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(user);
 
+            AddClaimsToUser(claims, user);
+
+            var identityClaims = CreateIdentityClaims(claims);
+            var encodedToken = CreateEncodedToken(_appSettings, identityClaims);
+
+            return new LoginResponseDTO
+            {
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiresIn).TotalSeconds,
+                UserToken = new UserTokenDTO
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Claims = claims.Select(c => new ClaimDTO
+                    {
+                        Type = c.Type,
+                        Value = c.Value
+                    })
+                }
+            };
+        }
+
+        private ClaimsIdentity CreateIdentityClaims(IList<Claim> claims)
+        {
+            var identityClaims = new ClaimsIdentity();
+            identityClaims.AddClaims(claims);
+
+            return identityClaims;
+        }
+
+        private void AddClaimsToUser(IList<Claim> claims, IdentityUser user)
+        {
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
 
+            AddRolesToUser(claims, user);
+        }
+
+        private async void AddRolesToUser(IList<Claim> claims, IdentityUser user)
+        {
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim("role", userRole));
             }
-            
-            var identityClaims = new ClaimsIdentity();
-            identityClaims.AddClaims(claims);
+        }
 
+        private string CreateEncodedToken(AppSettings appSettings, ClaimsIdentity identityClaims)
+        {
             var tokenHandlder = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var token = tokenHandlder.CreateToken(new SecurityTokenDescriptor
-            { 
-                Issuer = _appSettings.Issuer,
-                Audience = _appSettings.ValidIn,
+            {
+                Issuer = appSettings.Issuer,
+                Audience = appSettings.ValidIn,
                 Subject = identityClaims,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiresIn),
+                Expires = DateTime.UtcNow.AddHours(appSettings.ExpiresIn),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
-            var encodedToken = tokenHandlder.WriteToken(token);
-
-            var response = new LoginResponseDTO
-            {
-                AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiresIn).TotalSeconds,
-                UserToken = new UserTokenDTO
-                {
-                  Id = user.Id,
-                  Email = user.Email,
-                  Claims = claims.Select(c => new ClaimDTO { Type = c.Type, Value = c.Value })
-                }
-            };
-
-            return response;
+            return tokenHandlder.WriteToken(token);
         }
 
-        private static long ToUnixEpochDate(DateTime date) 
-            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+        private static long ToUnixEpochDate(DateTime date) =>
+            (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
     }
 }
