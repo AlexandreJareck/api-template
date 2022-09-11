@@ -1,4 +1,4 @@
-﻿using DevIO.Api.DTOs;
+﻿using DevIO.Api.DTOs.User;
 using DevIO.Api.Extensions;
 using DevIO.Business.Interfaces;
 using Microsoft.AspNetCore.Identity;
