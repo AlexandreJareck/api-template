@@ -78,7 +78,7 @@ namespace DevIO.Api.Controllers
             return CustomResponse(loginUser);
         }
 
-        private async Task<string> GenerateJwt(string email)
+        private async Task<LoginResponseDTO> GenerateJwt(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
@@ -112,7 +112,19 @@ namespace DevIO.Api.Controllers
 
             var encodedToken = tokenHandlder.WriteToken(token);
 
-            return encodedToken;
+            var response = new LoginResponseDTO
+            {
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiresIn).TotalSeconds,
+                UserToken = new UserTokenDTO
+                {
+                  Id = user.Id,
+                  Email = user.Email,
+                  Claims = claims.Select(c => new ClaimDTO { Type = c.Type, Value = c.Value })
+                }
+            };
+
+            return response;
         }
 
         private static long ToUnixEpochDate(DateTime date) 
