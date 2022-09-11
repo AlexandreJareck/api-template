@@ -19,15 +19,17 @@ namespace DevIO.Api.V1.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public AuthController(INotifier notifier,
                               IOptions<AppSettings> appSettings,
                               SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
-                              IUser user) : base(notifier, user)
+                              IUser user, ILogger<AuthController> logger) : base(notifier, user)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
             _appSettings = appSettings.Value;
         }
 
@@ -40,16 +42,19 @@ namespace DevIO.Api.V1.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"Usuário {loginUser.Email} logado com sucesso!");
                 return CustomResponse(await GenerateJwt(loginUser.Email));
             }
 
             if (result.IsLockedOut)
             {
                 NotifyError("Usuário temporariamente bloqueado por tentativas inválidas");
+                _logger.LogWarning($"Usuário: {loginUser.Email} bloqueado às {DateTime.Now}");
                 return CustomResponse(loginUser);
             }
 
             NotifyError("Usuário ou Senha incorretos");
+            _logger.LogWarning($"Usuário: {loginUser.Email} digitou email e/ou senha inválidos;");
             return CustomResponse(loginUser);
         }
 
