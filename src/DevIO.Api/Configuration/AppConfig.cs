@@ -33,7 +33,11 @@ public static class AppConfig
         if (env.IsDevelopment())
         {
             app.UseCors("Development");
-        }       
+        }
+        else
+        {
+            app.UseHsts();
+        }      
 
         app.UseHttpsRedirection();
 
