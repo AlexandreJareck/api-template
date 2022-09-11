@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevIO.Api.Controller;
 using DevIO.Api.DTOs;
 using DevIO.Api.Extensions;
 using DevIO.Business.Interfaces;
