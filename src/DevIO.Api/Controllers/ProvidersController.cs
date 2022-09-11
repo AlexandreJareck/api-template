@@ -3,10 +3,12 @@ using DevIO.Api.DTOs;
 using DevIO.Api.Extensions;
 using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.Api.Controllers;
 
+[Authorize]
 [Route("api/fornecedores")]
 public class ProvidersController : MainController
 {
