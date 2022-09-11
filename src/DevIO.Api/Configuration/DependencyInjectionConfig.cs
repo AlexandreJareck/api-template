@@ -1,4 +1,5 @@
-﻿using DevIO.Business.Interfaces;
+﻿using DevIO.Api.Extensions;
+using DevIO.Business.Interfaces;
 using DevIO.Business.Notifications;
 using DevIO.Business.Services;
 using DevIO.Data.Context;
@@ -18,6 +19,9 @@ public static class DependencyInjectionConfig
         services.AddScoped<INotifier, Notifier>();
         services.AddScoped<IProviderService, ProviderService>();
         services.AddScoped<IProductService, ProductService>();
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUser, AspNetUser>();
 
         return services;
     }
