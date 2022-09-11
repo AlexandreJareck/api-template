@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using DevIO.Api.DTOs;
+using DevIO.Api.Extensions;
 using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.Api.Controllers;
 
+[Authorize]
 [Route("api/produtos")]
 public class ProductsController : MainController
 {
@@ -24,6 +27,7 @@ public class ProductsController : MainController
         _mapper = mapper;
     }
 
+    [ClaimsAuthorize("Product", "Add")]
     [HttpPost]
     public async Task<ActionResult<ProductDTO>> Add(ProductDTO productDTO)
     {
@@ -56,6 +60,7 @@ public class ProductsController : MainController
         return CustomResponse(productDTO);
     }
 
+    [ClaimsAuthorize("Product", "Update")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, ProductDTO productDTO)
     {
@@ -93,7 +98,7 @@ public class ProductsController : MainController
         return CustomResponse(productDTO);
     }
 
-
+    [ClaimsAuthorize("Product", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<ProductDTO>> Delete(Guid id)
     {
