@@ -8,7 +8,7 @@ public interface IUser
 
     Guid GetUserId();
     string GetUserEmail();
-    bool IsAuthrenticated();
+    bool IsAuthenticated();
     bool IsInRole(string role);
     IEnumerable<Claim> GetClaimsIdentity();
 }

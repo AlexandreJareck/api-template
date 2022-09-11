@@ -21,7 +21,8 @@ public class ProvidersController : MainController
                                IAddressRepository addressRepository,
                                IMapper mapper,
                                IProviderService providerService,
-                               INotifier notifier) : base(notifier)
+                               INotifier notifier,
+                               IUser user) : base(notifier, user)
     {
         _providerRepository = providerRepository;
         _mapper = mapper;

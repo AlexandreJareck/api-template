@@ -15,13 +15,13 @@ public class AspNetUser : IUser
     public string Name => _accessor.HttpContext.User.Identity.Name;
     public Guid GetUserId()
     {
-        return IsAuthrenticated() ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.NewGuid();
+        return IsAuthenticated() ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.NewGuid();
     }
     public string GetUserEmail()
     {
-        return IsAuthrenticated() ? _accessor.HttpContext.User.GetUserEmail() : "";
+        return IsAuthenticated() ? _accessor.HttpContext.User.GetUserEmail() : "";
     }
-    public bool IsAuthrenticated()
+    public bool IsAuthenticated()
     {
         return _accessor.HttpContext.User.Identity.IsAuthenticated;
     }
