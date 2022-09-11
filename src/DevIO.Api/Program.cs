@@ -17,8 +17,8 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 builder.Services.AddIdentityConfiguration(builder.Configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSwaggerGen();
 builder.Services.AddApiConfig();
+builder.Services.AddSwaggerGen();
 builder.Services.ResolveDependencies();
 
 var app = builder.Build();

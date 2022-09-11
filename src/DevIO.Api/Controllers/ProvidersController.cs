@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevIO.Api.Controllers;
 
 [Authorize]
-[Route("api/fornecedores")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/fornecedores")]
 public class ProvidersController : MainController
 {
     private readonly IProviderRepository _providerRepository;
@@ -29,7 +30,7 @@ public class ProvidersController : MainController
         _providerService = providerService;
         _addressRepository = addressRepository;
     }
-
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IEnumerable<ProviderDTO>> GetAll()
     {

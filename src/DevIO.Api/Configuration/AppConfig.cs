@@ -30,19 +30,17 @@ public static class AppConfig
 
         services.AddCors(options =>
         {
-            options.AddPolicy("Devlopment", builder =>
+            options.AddPolicy("Development", builder =>
                 builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                    .AllowAnyHeader());
 
-            //options.AddDefaultPolicy(builder =>
-            //    builder
-            //        .AllowAnyOrigin()
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials());
+            options.AddDefaultPolicy(builder =>
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
 
             options.AddPolicy("Production", builder =>
                 builder
@@ -52,8 +50,6 @@ public static class AppConfig
                     //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
                     .AllowAnyHeader());
         });
-
-        services.ResolveDependencies();
 
         return services;
     }
@@ -71,7 +67,6 @@ public static class AppConfig
             app.UseHsts();
         }
 
-        app.UseCors("Development");
         app.UseHttpsRedirection();
 
         app.UseAuthentication();

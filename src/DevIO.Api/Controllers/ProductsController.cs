@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevIO.Api.Controllers;
 
 [Authorize]
-[Route("api/produtos")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/produtos")]
 public class ProductsController : MainController
 {
 
