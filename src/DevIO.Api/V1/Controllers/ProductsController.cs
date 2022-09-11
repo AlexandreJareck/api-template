@@ -6,7 +6,7 @@ using DevIO.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevIO.Api.Controllers;
+namespace DevIO.Api.V1.Controllers;
 
 [Authorize]
 [ApiVersion("1.0")]
@@ -37,7 +37,7 @@ public class ProductsController : MainController
 
         var imgName = $"{Guid.NewGuid()}_{productDTO.Image}";
 
-        if(!UploadFile(productDTO.ImageUpload, imgName))
+        if (!UploadFile(productDTO.ImageUpload, imgName))
             return CustomResponse();
 
         productDTO.Image = imgName;

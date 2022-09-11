@@ -6,7 +6,7 @@ using DevIO.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevIO.Api.Controllers;
+namespace DevIO.Api.V1.Controllers;
 
 [Authorize]
 [ApiVersion("1.0")]
@@ -52,7 +52,7 @@ public class ProvidersController : MainController
     [HttpPost]
     public async Task<ActionResult<ProviderDTO>> Add(ProviderDTO providerDTO)
     {
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
             return CustomResponse(ModelState);
 
         await _providerService.Add(_mapper.Map<Provider>(providerDTO));
@@ -70,7 +70,7 @@ public class ProvidersController : MainController
             return CustomResponse(providerDTO);
         }
 
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
             return CustomResponse(ModelState);
 
         await _providerService.Update(_mapper.Map<Provider>(providerDTO));
@@ -84,7 +84,7 @@ public class ProvidersController : MainController
     {
         var providerDTO = _mapper.Map<ProviderDTO>(await _providerRepository.GetProviderAddress(id));
 
-        if (providerDTO == null) 
+        if (providerDTO == null)
             return NotFound();
 
         await _providerService.Remove(id);
@@ -110,7 +110,7 @@ public class ProvidersController : MainController
             return CustomResponse(addressDTO);
         }
 
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
             return CustomResponse(ModelState);
 
         await _providerService.UpdateAddress(_mapper.Map<Address>(addressDTO));

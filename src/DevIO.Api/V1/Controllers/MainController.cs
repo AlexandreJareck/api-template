@@ -3,7 +3,7 @@ using DevIO.Business.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace DevIO.Api.Controllers;
+namespace DevIO.Api.V1.Controllers;
 
 [ApiController]
 public abstract class MainController : ControllerBase
@@ -51,7 +51,7 @@ public abstract class MainController : ControllerBase
 
     protected ActionResult CustomResponse(ModelStateDictionary modelState)
     {
-        if(!modelState.IsValid)
+        if (!modelState.IsValid)
             NotificationErrorModelInvalid(modelState);
 
         return CustomResponse();
